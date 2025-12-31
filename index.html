@@ -2,7 +2,7 @@
 <html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
-    <title>音樂播放測試</title>
+    <title>音樂播放控制台</title>
 
     <style>
         body {
@@ -16,29 +16,48 @@
         }
 
         .container {
+            background: rgba(0,0,0,0.25);
+            padding: 40px;
+            border-radius: 20px;
             text-align: center;
+            color: white;
+            min-width: 320px;
         }
 
         h1 {
-            color: white;
             margin-bottom: 30px;
         }
 
         button {
-            font-size: 24px;
-            padding: 18px 36px;
+            font-size: 22px;
+            padding: 14px 32px;
             border-radius: 14px;
             border: none;
             cursor: pointer;
             background: #ff9800;
             color: white;
             box-shadow: 0 6px 15px rgba(0,0,0,0.3);
-            transition: transform 0.1s, box-shadow 0.1s;
+            margin-bottom: 25px;
         }
 
-        button:hover {
-            transform: scale(1.05);
-            box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+        .control {
+            margin: 15px 0;
+            text-align: left;
+        }
+
+        label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 6px;
+            font-size: 16px;
+        }
+
+        input[type="range"] {
+            width: 100%;
+        }
+
+        .value {
+            font-weight: bold;
         }
     </style>
 </head>
@@ -46,30 +65,60 @@
 
 <div class="container">
     <h1>🎵 音樂播放</h1>
+
     <button id="playBtn" onclick="toggleMusic()">▶ 播放音樂</button>
+
+    <!-- 音量控制 -->
+    <div class="control">
+        <label>
+            🔊 音量
+            <span class="value" id="volumeValue">100%</span>
+        </label>
+        <input type="range" min="0" max="100" value="100" oninput="changeVolume(this.value)">
+    </div>
+
+    <!-- 速度控制 -->
+    <div class="control">
+        <label>
+            ⏩ 速度
+            <span class="value" id="speedValue">1.0x</span>
+        </label>
+        <input type="range" min="50" max="200" value="100" step="10" oninput="changeSpeed(this.value)">
+    </div>
 </div>
 
 <audio id="bgm" src="bgmusic.mp3"></audio>
 
 <script>
     const audio = document.getElementById("bgm");
-    const button = document.getElementById("playBtn");
+    const playBtn = document.getElementById("playBtn");
+    const volumeText = document.getElementById("volumeValue");
+    const speedText = document.getElementById("speedValue");
 
     function toggleMusic() {
         if (audio.paused) {
-            audio.currentTime = 0;   // 每次播放都從頭
+            audio.currentTime = 0;
             audio.play();
-            button.textContent = "⏹ 停止播放";
+            playBtn.textContent = "⏹ 停止播放";
         } else {
             audio.pause();
             audio.currentTime = 0;
-            button.textContent = "▶ 播放音樂";
+            playBtn.textContent = "▶ 播放音樂";
         }
     }
 
-    // 如果音樂播完，自動把按鈕變回「播放音樂」
+    function changeVolume(value) {
+        audio.volume = value / 100;
+        volumeText.textContent = value + "%";
+    }
+
+    function changeSpeed(value) {
+        audio.playbackRate = value / 100;
+        speedText.textContent = (value / 100).toFixed(1) + "x";
+    }
+
     audio.addEventListener("ended", () => {
-        button.textContent = "▶ 播放音樂";
+        playBtn.textContent = "▶ 播放音樂";
     });
 </script>
 

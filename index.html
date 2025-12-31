@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <title>播放音樂範例</title>
+    <style>
+        body {
+            font-family: "Segoe UI", sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: linear-gradient(135deg, #fbc2eb, #a6c1ee);
+        }
+
+        button {
+            font-size: 24px;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            background-color: #ff7a7a;
+            color: white;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+            transition: transform 0.1s, box-shadow 0.1s;
+        }
+
+        button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+        }
+    </style>
+</head>
+<body>
+
+<button onclick="playMusic()">▶ 播放音樂</button>
+
+<audio id="bgm">
+    <source src="https://drive.google.com/uc?export=download&id=1IKIlRFVljVDMzgeI7K4OYKE_T0JN6W3k" type="audio/mpeg">
+    您的瀏覽器不支援音樂播放
+</audio>
+
+<script>
+    function playMusic() {
+        const audio = document.getElementById("bgm");
+        audio.play();
+    }
+</script>
+
+</body>
+</html>

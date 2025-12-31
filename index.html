@@ -46,19 +46,32 @@
 
 <div class="container">
     <h1>🎵 音樂播放</h1>
-    <button onclick="playMusic()">▶ 點我播放音樂</button>
+    <button id="playBtn" onclick="toggleMusic()">▶ 播放音樂</button>
 </div>
 
-<audio id="bgm" src="bgmusic.mp3" controls></audio>
+<audio id="bgm" src="bgmusic.mp3"></audio>
 
 <script>
-    function playMusic() {
-        const audio = document.getElementById("bgm");
-        audio.currentTime = 0;   // 每次從頭播放
-        audio.play();
+    const audio = document.getElementById("bgm");
+    const button = document.getElementById("playBtn");
+
+    function toggleMusic() {
+        if (audio.paused) {
+            audio.currentTime = 0;   // 每次播放都從頭
+            audio.play();
+            button.textContent = "⏹ 停止播放";
+        } else {
+            audio.pause();
+            audio.currentTime = 0;
+            button.textContent = "▶ 播放音樂";
+        }
     }
+
+    // 如果音樂播完，自動把按鈕變回「播放音樂」
+    audio.addEventListener("ended", () => {
+        button.textContent = "▶ 播放音樂";
+    });
 </script>
 
 </body>
 </html>
-

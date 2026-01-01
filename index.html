@@ -263,7 +263,7 @@
             background: #1a1a2e;
             padding: 30px;
             border-radius: 20px;
-            max-width: 900px;
+            max-width: 800px;
             width: 95%;
             max-height: 85vh;
             overflow-y: auto;
@@ -372,7 +372,8 @@
         </div>
         
         <div class="title-group">
-            <div style="font-weight: bold; font-size: 18px;">🕹️ 一元一次俄羅斯</div>
+            <!-- 標題修改為指定名稱 -->
+            <div style="font-weight: bold; font-size: 18px;">🕹️ 一元一次俄羅斯(東興ㄚ杰製)</div>
         </div>
 
         <div>
@@ -447,6 +448,7 @@
 
     <div id="help-overlay">
         <div class="help-content">
+            <!-- 標題修改為指定名稱 -->
             <h2 style="text-align: center; color: var(--text-color);">一元一次俄羅斯(東興ㄚ杰製)</h2>
             
             <table class="help-table">
@@ -559,8 +561,6 @@
                 else { this.matrix = this.nextMatrix; this.isBombActive = false; this.setNextPiece(); }
                 this.pos.y = 0; this.pos.x = (COLS / 2 | 0) - (this.matrix[0].length / 2 | 0);
                 this.waitReleaseDown = true; 
-                
-                // 新方塊產生位置發生碰撞判定敗戰
                 if (this.collide()) endGame(this.id); 
                 this.drawNext();
             }
@@ -639,13 +639,10 @@
 
             receiveAttack(lines) {
                 for (let i = 0; i < lines; i++) {
-                    // 修改處：在推送垃圾行時，檢查是否有方塊被擠出頂部或發生碰撞（即便在解題中）
                     const topRowOccupied = this.board[0].some(val => val !== 0);
                     const row = Array(COLS).fill(8); row[Math.floor(Math.random() * COLS)] = 0;
                     this.board.shift();
                     this.board.push(row);
-                    
-                    // 如果方塊被擠出頂部，或是新棋盤與當前方塊碰撞，立即判輸
                     if (topRowOccupied || this.collide()) {
                         endGame(this.id);
                         return; 

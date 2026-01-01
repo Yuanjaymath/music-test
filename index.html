@@ -108,7 +108,7 @@
 
         .player-section {
             display: flex;
-            flex-direction: row; /* 水平排列按鈕與棋盤 */
+            flex-direction: row; 
             align-items: center;
             justify-content: center;
             width: 50%;
@@ -117,7 +117,6 @@
             gap: 10px;
         }
 
-        /* 玩家 B 的排列順序相反，讓按鈕始終在最外側 */
         #player-b {
             flex-direction: row-reverse;
         }
@@ -158,7 +157,6 @@
         .info-label { font-size: 10px; color: #ccc; }
         .info-value { font-size: 14px; font-weight: bold; color: #00d4ff; }
 
-        /* 虛擬按鍵區 - 改為垂直佈局適合平板兩側 */
         .touch-controls {
             display: none; 
             flex-direction: column;
@@ -197,13 +195,12 @@
             margin-top: 10px;
         }
 
-        /* 方程式解題區 - 置中於棋盤 */
         .math-overlay {
             position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            width: 110%; /* 稍微寬過棋盤 */
+            width: 110%; 
             background: rgba(15, 52, 96, 0.98);
             border: 4px solid var(--text-color);
             border-radius: 15px;
@@ -244,7 +241,6 @@
             background: #e94560;
         }
 
-        /* 說明視窗 Overlay */
         #help-overlay {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -341,7 +337,7 @@
 
         @keyframes fadeUp {
             from { opacity: 1; transform: translate(-50%, 0); }
-            to { opacity: 0; transform: translate(-50%, -60px); }
+            to { opacity: 0; transform: translate(-50%, -80px); }
         }
     </style>
 </head>
@@ -372,12 +368,11 @@
     <div id="game-container">
         <!-- 玩家 A (左) -->
         <div id="player-a" class="player-section">
-            <!-- 觸控按鈕 A 在最左側 -->
             <div class="touch-controls" id="touch-a">
-                <div class="t-btn" onmousedown="touchInput('A', 'up', true)" onmouseup="touchInput('A', 'up', false)" ontouchstart="touchInput('A', 'up', true)" ontouchend="touchInput('A', 'up', false)">旋轉</div>
-                <div class="t-btn" onmousedown="touchInput('A', 'left', true)" onmouseup="touchInput('A', 'left', false)" ontouchstart="touchInput('A', 'left', true)" ontouchend="touchInput('A', 'left', false)">←</div>
-                <div class="t-btn" onmousedown="touchInput('A', 'right', true)" onmouseup="touchInput('A', 'right', false)" ontouchstart="touchInput('A', 'right', true)" ontouchend="touchInput('A', 'right', false)">→</div>
-                <div class="t-btn" onmousedown="touchInput('A', 'down', true)" onmouseup="touchInput('A', 'down', false)" ontouchstart="touchInput('A', 'down', true)" ontouchend="touchInput('A', 'down', false)">↓</div>
+                <div class="t-btn" onmousedown="touchInput(event, 'A', 'up', true)" onmouseup="touchInput(event, 'A', 'up', false)" ontouchstart="touchInput(event, 'A', 'up', true)" ontouchend="touchInput(event, 'A', 'up', false)">旋轉</div>
+                <div class="t-btn" onmousedown="touchInput(event, 'A', 'left', true)" onmouseup="touchInput(event, 'A', 'left', false)" ontouchstart="touchInput(event, 'A', 'left', true)" ontouchend="touchInput(event, 'A', 'left', false)">←</div>
+                <div class="t-btn" onmousedown="touchInput(event, 'A', 'right', true)" onmouseup="touchInput(event, 'A', 'right', false)" ontouchstart="touchInput(event, 'A', 'right', true)" ontouchend="touchInput(event, 'A', 'right', false)">→</div>
+                <div class="t-btn" onmousedown="touchInput(event, 'A', 'down', true)" onmouseup="touchInput(event, 'A', 'down', false)" ontouchstart="touchInput(event, 'A', 'down', true)" ontouchend="touchInput(event, 'A', 'down', false)">↓</div>
                 <div class="t-btn confirm" id="confirm-a-btn" style="display:none" onclick="playerA.confirmAnswer()">確認 (Q)</div>
             </div>
 
@@ -402,12 +397,11 @@
 
         <!-- 玩家 B (右) -->
         <div id="player-b" class="player-section">
-            <!-- 觸控按鈕 B 在最右側 -->
             <div class="touch-controls" id="touch-b">
-                <div class="t-btn" onmousedown="touchInput('B', 'up', true)" onmouseup="touchInput('B', 'up', false)" ontouchstart="touchInput('B', 'up', true)" ontouchend="touchInput('B', 'up', false)">旋轉</div>
-                <div class="t-btn" onmousedown="touchInput('B', 'left', true)" onmouseup="touchInput('B', 'left', false)" ontouchstart="touchInput('B', 'left', true)" ontouchend="touchInput('B', 'left', false)">←</div>
-                <div class="t-btn" onmousedown="touchInput('B', 'right', true)" onmouseup="touchInput('B', 'right', false)" ontouchstart="touchInput('B', 'right', true)" ontouchend="touchInput('B', 'right', false)">→</div>
-                <div class="t-btn" onmousedown="touchInput('B', 'down', true)" onmouseup="touchInput('B', 'down', false)" ontouchstart="touchInput('B', 'down', true)" ontouchend="touchInput('B', 'down', false)">↓</div>
+                <div class="t-btn" onmousedown="touchInput(event, 'B', 'up', true)" onmouseup="touchInput(event, 'B', 'up', false)" ontouchstart="touchInput(event, 'B', 'up', true)" ontouchend="touchInput(event, 'B', 'up', false)">旋轉</div>
+                <div class="t-btn" onmousedown="touchInput(event, 'B', 'left', true)" onmouseup="touchInput(event, 'B', 'left', false)" ontouchstart="touchInput(event, 'B', 'left', true)" ontouchend="touchInput(event, 'B', 'left', false)">←</div>
+                <div class="t-btn" onmousedown="touchInput(event, 'B', 'right', true)" onmouseup="touchInput(event, 'B', 'right', false)" ontouchstart="touchInput(event, 'B', 'right', true)" ontouchend="touchInput(event, 'B', 'right', false)">→</div>
+                <div class="t-btn" onmousedown="touchInput(event, 'B', 'down', true)" onmouseup="touchInput(event, 'B', 'down', false)" ontouchstart="touchInput(event, 'B', 'down', true)" ontouchend="touchInput(event, 'B', 'down', false)">↓</div>
                 <div class="t-btn confirm" id="confirm-b-btn" style="display:none" onclick="playerB.confirmAnswer()">確認 (Ent)</div>
             </div>
 
@@ -699,7 +693,9 @@
 
         const playerA = new Player('A', 'canvas-a', 'next-a', 'score-a', 'math-a'), playerB = new Player('B', 'canvas-b', 'next-b', 'score-b', 'math-b');
 
-        function touchInput(pID, action, isPressed) {
+        // 修復：平板觸控輸入靈敏度
+        function touchInput(e, pID, action, isPressed) {
+            if (e) e.preventDefault(); // 阻止 mouse 事件重複觸發
             const p = (pID === 'A') ? playerA : playerB;
             if (action === 'left') p.touchLeft = isPressed; if (action === 'right') p.touchRight = isPressed; if (action === 'down') p.touchDown = isPressed;
             if (action === 'up' && isPressed) { if (p.isSolving) p.selectMathOption(0, -1); else p.rotate(); }
@@ -708,21 +704,23 @@
 
         window.addEventListener('keydown', e => {
             if (isPaused || isGameOver) return;
-            if (e.code === 'KeyA') { if (playerA.isSolving) playerA.selectMathOption(-1, 0); else playerA.keyboardLeft = true; }
-            if (e.code === 'KeyD') { if (playerA.isSolving) playerA.selectMathOption(1, 0); else playerA.keyboardRight = true; }
-            if (e.code === 'KeyS') { if (playerA.isSolving) playerA.selectMathOption(0, 1); else playerA.keyboardDown = true; }
-            if (e.code === 'KeyW') { if (playerA.isSolving) playerA.selectMathOption(0, -1); else playerA.rotate(); }
-            if ((e.code === 'KeyQ' || e.code === 'KeyE') && playerA.isSolving) playerA.confirmAnswer();
-            if (e.code === 'ArrowLeft') { if (playerB.isSolving) playerB.selectMathOption(-1, 0); else playerB.keyboardLeft = true; }
-            if (e.code === 'ArrowRight') { if (playerB.isSolving) playerB.selectMathOption(1, 0); else playerB.keyboardRight = true; }
-            if (e.code === 'ArrowDown') { if (playerB.isSolving) playerB.selectMathOption(0, 1); else playerB.keyboardDown = true; }
-            if (e.code === 'ArrowUp') { if (playerB.isSolving) playerB.selectMathOption(0, -1); else playerB.rotate(); }
-            if (e.code === 'Enter' && playerB.isSolving) playerB.confirmAnswer();
+            const code = e.code;
+            if (code === 'KeyA') { if (playerA.isSolving) playerA.selectMathOption(-1, 0); else playerA.keyboardLeft = true; }
+            if (code === 'KeyD') { if (playerA.isSolving) playerA.selectMathOption(1, 0); else playerA.keyboardRight = true; }
+            if (code === 'KeyS') { if (playerA.isSolving) playerA.selectMathOption(0, 1); else playerA.keyboardDown = true; }
+            if (code === 'KeyW') { if (playerA.isSolving) playerA.selectMathOption(0, -1); else playerA.rotate(); }
+            if ((code === 'KeyQ' || code === 'KeyE') && playerA.isSolving) playerA.confirmAnswer();
+            if (code === 'ArrowLeft') { if (playerB.isSolving) playerB.selectMathOption(-1, 0); else playerB.keyboardLeft = true; }
+            if (code === 'ArrowRight') { if (playerB.isSolving) playerB.selectMathOption(1, 0); else playerB.keyboardRight = true; }
+            if (code === 'ArrowDown') { if (playerB.isSolving) playerB.selectMathOption(0, 1); else playerB.keyboardDown = true; }
+            if (code === 'ArrowUp') { if (playerB.isSolving) playerB.selectMathOption(0, -1); else playerB.rotate(); }
+            if (code === 'Enter' && playerB.isSolving) playerB.confirmAnswer();
         });
 
         window.addEventListener('keyup', e => {
-            if (e.code === 'KeyA') playerA.keyboardLeft = false; if (e.code === 'KeyD') playerA.keyboardRight = false; if (e.code === 'KeyS') playerA.keyboardDown = false;
-            if (e.code === 'ArrowLeft') playerB.keyboardLeft = false; if (e.code === 'ArrowRight') playerB.keyboardRight = false; if (e.code === 'ArrowDown') playerB.keyboardDown = false;
+            const code = e.code;
+            if (code === 'KeyA') playerA.keyboardLeft = false; if (code === 'KeyD') playerA.keyboardRight = false; if (code === 'KeyS') playerA.keyboardDown = false;
+            if (code === 'ArrowLeft') playerB.keyboardLeft = false; if (code === 'ArrowRight') playerB.keyboardRight = false; if (code === 'ArrowDown') playerB.keyboardDown = false;
         });
 
         function pollGamepads() {
@@ -743,6 +741,7 @@
             });
         }
 
+        let lastTime = 0;
         function update(time = 0) {
             const dt = time - lastTime; lastTime = time; pollGamepads();
             [playerA, playerB].forEach(p => {
@@ -776,7 +775,7 @@
             if (audioEnabled) { currentBgmIndex = 0; playNextBgm(); }
         }
 
-        let lastTime = 0; update(); document.getElementById('help-overlay').style.display = 'flex';
+        update(); document.getElementById('help-overlay').style.display = 'flex';
     </script>
 </body>
 </html>

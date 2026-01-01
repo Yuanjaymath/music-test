@@ -30,7 +30,7 @@
         #top-bar {
             width: 100%;
             background: #0f3460;
-            padding: 5px 10px;
+            padding: 5px 15px;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -53,7 +53,7 @@
         }
 
         .volume-slider {
-            width: 80px;
+            width: 70px;
             cursor: pointer;
         }
 
@@ -66,7 +66,7 @@
         }
 
         .btn {
-            padding: 5px 12px;
+            padding: 6px 12px;
             border: none;
             border-radius: 5px;
             cursor: pointer;
@@ -91,19 +91,19 @@
             padding: 8px 20px;
             display: none; 
         }
-        .btn-audio { background: #533483; min-width: 80px; }
+        .btn-audio { background: #533483; min-width: 70px; }
 
-        /* 遊戲主容器 - 左右兩側佈局 */
+        /* 遊戲主容器 */
         #game-container {
             display: flex;
             width: 100%;
             flex: 1;
             justify-content: center;
-            align-items: stretch;
+            align-items: center;
             padding: 5px;
             box-sizing: border-box;
             height: calc(100vh - 50px);
-            gap: 10px;
+            gap: 5px;
         }
 
         .player-section {
@@ -125,8 +125,8 @@
             display: flex;
             gap: 5px;
             background: var(--panel-color);
-            padding: 10px;
-            border-radius: 10px;
+            padding: 8px;
+            border-radius: 12px;
             border: 2px solid #533483;
             max-height: 85%;
             position: relative;
@@ -136,15 +136,15 @@
             background: #000;
             border: 1px solid #333;
             height: auto;
-            max-height: 65vh; 
+            max-height: 60vh; 
         }
 
         .side-panel {
             display: flex;
             flex-direction: column;
             justify-content: flex-start;
-            gap: 8px;
-            width: 70px;
+            gap: 10px;
+            width: 60px;
         }
 
         .info-box {
@@ -157,25 +157,26 @@
         .info-label { font-size: 10px; color: #ccc; }
         .info-value { font-size: 14px; font-weight: bold; color: #00d4ff; }
 
+        /* 複刻圖片配置的觸控按鈕區 */
         .touch-controls {
             display: none; 
-            flex-direction: column;
-            gap: 12px;
-            width: 80px;
-            z-index: 10;
+            grid-template-columns: repeat(2, 75px); /* 兩欄佈局 */
+            grid-template-rows: 70px 70px 70px;    /* 三列佈局 */
+            gap: 4px;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
         }
 
         .t-btn {
             background: rgba(255, 255, 255, 0.1);
-            border: 2px solid rgba(255, 255, 255, 0.3);
+            border: 2px solid rgba(255, 255, 255, 0.2);
             color: white;
             border-radius: 12px;
-            height: 65px;
-            width: 65px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 24px;
+            font-size: 28px;
             cursor: pointer;
             user-select: none;
             touch-action: none;
@@ -183,24 +184,22 @@
 
         .t-btn:active {
             background: var(--text-color);
-            transform: scale(0.92);
+            transform: scale(0.95);
         }
 
-        .t-btn.confirm {
-            height: 80px;
-            background: rgba(40, 167, 69, 0.3);
-            border-color: #28a745;
-            font-size: 16px;
-            width: 100%;
-            margin-top: 10px;
-        }
+        /* 圖片樣式對應位置 */
+        .t-btn.up { grid-column: span 2; grid-row: 1; font-size: 18px; font-weight: bold; color: #00ffcc; }
+        .t-btn.left { grid-column: 1; grid-row: 2; border-right-width: 1px; border-top-right-radius: 0; border-bottom-right-radius: 0; }
+        .t-btn.right { grid-column: 2; grid-row: 2; border-left-width: 1px; border-top-left-radius: 0; border-bottom-left-radius: 0; }
+        .t-btn.down { grid-column: span 2; grid-row: 3; }
 
+        /* 解題畫面 */
         .math-overlay {
             position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            width: 110%; 
+            width: 100%; 
             background: rgba(15, 52, 96, 0.98);
             border: 4px solid var(--text-color);
             border-radius: 15px;
@@ -212,33 +211,35 @@
         }
 
         .math-equation {
-            font-size: 20px;
-            margin-bottom: 12px;
+            font-size: 24px;
+            margin-bottom: 15px;
             color: #fff;
             background: #1a1a2e;
-            padding: 8px;
+            padding: 12px;
             border-radius: 5px;
             word-break: break-all;
+            font-weight: bold;
         }
 
         .math-options {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 8px;
+            gap: 15px;
         }
 
         .option-btn {
-            padding: 10px;
+            padding: 20px 5px;
             background: #533483;
-            border: 2px solid transparent;
+            border: 2px solid rgba(255,255,255,0.2);
             color: white;
-            border-radius: 8px;
-            font-size: 16px;
+            border-radius: 12px;
+            font-size: 22px;
+            cursor: pointer;
         }
 
-        .option-btn.selected {
-            border-color: #00ffcc;
+        .option-btn:active {
             background: #e94560;
+            border-color: #00ffcc;
         }
 
         #help-overlay {
@@ -255,7 +256,7 @@
             background: #1a1a2e;
             padding: 25px;
             border-radius: 20px;
-            max-width: 900px;
+            max-width: 800px;
             width: 95%;
             max-height: 85vh;
             overflow-y: auto;
@@ -266,11 +267,11 @@
             width: 100%;
             border-collapse: collapse;
             margin: 10px 0;
-            font-size: 13px;
+            font-size: 14px;
         }
         .help-table th, .help-table td {
             border: 1px solid #333;
-            padding: 8px;
+            padding: 10px;
             text-align: left;
         }
         .help-table th { background: #0f3460; }
@@ -299,17 +300,11 @@
 
         .win-celebration { 
             color: #ffcc00; 
-            font-size: 48px; 
+            font-size: 50px; 
             font-weight: 900;
             text-shadow: 0 0 30px rgba(255, 204, 0, 0.8);
             animation: winPulse 1.5s infinite;
             text-align: center;
-        }
-
-        @keyframes winPulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
         }
 
         .petal {
@@ -337,7 +332,7 @@
 
         @keyframes fadeUp {
             from { opacity: 1; transform: translate(-50%, 0); }
-            to { opacity: 0; transform: translate(-50%, -80px); }
+            to { opacity: 0; transform: translate(-50%, -60px); }
         }
     </style>
 </head>
@@ -351,6 +346,7 @@
             <button class="btn btn-audio" id="bgm-toggle" onclick="toggleMusic()">音樂: 關</button>
             <button class="btn btn-audio" id="sfx-toggle" onclick="toggleSFX()">音效: 關</button>
             <div class="volume-control">
+                <span>🔊</span>
                 <input type="range" class="volume-slider" id="volume-slider" min="0" max="1" step="0.1" value="0.5" oninput="updateVolume(this.value)">
             </div>
         </div>
@@ -369,11 +365,10 @@
         <!-- 玩家 A (左) -->
         <div id="player-a" class="player-section">
             <div class="touch-controls" id="touch-a">
-                <div class="t-btn" onmousedown="touchInput(event, 'A', 'up', true)" onmouseup="touchInput(event, 'A', 'up', false)" ontouchstart="touchInput(event, 'A', 'up', true)" ontouchend="touchInput(event, 'A', 'up', false)">旋轉</div>
-                <div class="t-btn" onmousedown="touchInput(event, 'A', 'left', true)" onmouseup="touchInput(event, 'A', 'left', false)" ontouchstart="touchInput(event, 'A', 'left', true)" ontouchend="touchInput(event, 'A', 'left', false)">←</div>
-                <div class="t-btn" onmousedown="touchInput(event, 'A', 'right', true)" onmouseup="touchInput(event, 'A', 'right', false)" ontouchstart="touchInput(event, 'A', 'right', true)" ontouchend="touchInput(event, 'A', 'right', false)">→</div>
-                <div class="t-btn" onmousedown="touchInput(event, 'A', 'down', true)" onmouseup="touchInput(event, 'A', 'down', false)" ontouchstart="touchInput(event, 'A', 'down', true)" ontouchend="touchInput(event, 'A', 'down', false)">↓</div>
-                <div class="t-btn confirm" id="confirm-a-btn" style="display:none" onclick="playerA.confirmAnswer()">確認 (Q)</div>
+                <div class="t-btn up" onmousedown="touchInput(event, 'A', 'up', true)" onmouseup="touchInput(event, 'A', 'up', false)" ontouchstart="touchInput(event, 'A', 'up', true)" ontouchend="touchInput(event, 'A', 'up', false)">旋轉</div>
+                <div class="t-btn left" onmousedown="touchInput(event, 'A', 'left', true)" onmouseup="touchInput(event, 'A', 'left', false)" ontouchstart="touchInput(event, 'A', 'left', true)" ontouchend="touchInput(event, 'A', 'left', false)">←</div>
+                <div class="t-btn right" onmousedown="touchInput(event, 'A', 'right', true)" onmouseup="touchInput(event, 'A', 'right', false)" ontouchstart="touchInput(event, 'A', 'right', true)" ontouchend="touchInput(event, 'A', 'right', false)">→</div>
+                <div class="t-btn down" onmousedown="touchInput(event, 'A', 'down', true)" onmouseup="touchInput(event, 'A', 'down', false)" ontouchstart="touchInput(event, 'A', 'down', true)" ontouchend="touchInput(event, 'A', 'down', false)">↓</div>
             </div>
 
             <div class="board-container">
@@ -398,11 +393,10 @@
         <!-- 玩家 B (右) -->
         <div id="player-b" class="player-section">
             <div class="touch-controls" id="touch-b">
-                <div class="t-btn" onmousedown="touchInput(event, 'B', 'up', true)" onmouseup="touchInput(event, 'B', 'up', false)" ontouchstart="touchInput(event, 'B', 'up', true)" ontouchend="touchInput(event, 'B', 'up', false)">旋轉</div>
-                <div class="t-btn" onmousedown="touchInput(event, 'B', 'left', true)" onmouseup="touchInput(event, 'B', 'left', false)" ontouchstart="touchInput(event, 'B', 'left', true)" ontouchend="touchInput(event, 'B', 'left', false)">←</div>
-                <div class="t-btn" onmousedown="touchInput(event, 'B', 'right', true)" onmouseup="touchInput(event, 'B', 'right', false)" ontouchstart="touchInput(event, 'B', 'right', true)" ontouchend="touchInput(event, 'B', 'right', false)">→</div>
-                <div class="t-btn" onmousedown="touchInput(event, 'B', 'down', true)" onmouseup="touchInput(event, 'B', 'down', false)" ontouchstart="touchInput(event, 'B', 'down', true)" ontouchend="touchInput(event, 'B', 'down', false)">↓</div>
-                <div class="t-btn confirm" id="confirm-b-btn" style="display:none" onclick="playerB.confirmAnswer()">確認 (Ent)</div>
+                <div class="t-btn up" onmousedown="touchInput(event, 'B', 'up', true)" onmouseup="touchInput(event, 'B', 'up', false)" ontouchstart="touchInput(event, 'B', 'up', true)" ontouchend="touchInput(event, 'B', 'up', false)">旋轉</div>
+                <div class="t-btn left" onmousedown="touchInput(event, 'B', 'left', true)" onmouseup="touchInput(event, 'B', 'left', false)" ontouchstart="touchInput(event, 'B', 'left', true)" ontouchend="touchInput(event, 'B', 'left', false)">←</div>
+                <div class="t-btn right" onmousedown="touchInput(event, 'B', 'right', true)" onmouseup="touchInput(event, 'B', 'right', false)" ontouchstart="touchInput(event, 'B', 'right', true)" ontouchend="touchInput(event, 'B', 'right', false)">→</div>
+                <div class="t-btn down" onmousedown="touchInput(event, 'B', 'down', true)" onmouseup="touchInput(event, 'B', 'down', false)" ontouchstart="touchInput(event, 'B', 'down', true)" ontouchend="touchInput(event, 'B', 'down', false)">↓</div>
             </div>
 
             <div class="board-container">
@@ -436,20 +430,20 @@
             <h2 style="text-align: center; color: var(--text-color);">《一元一次俄羅斯》操作說明</h2>
             
             <table class="help-table">
-                <tr><th>功能</th><th>玩家 A (鍵盤)</th><th>玩家 B (鍵盤)</th><th>PS/2 搖桿</th><th>平板 (觸控鈕)</th></tr>
-                <tr><td>左右移動</td><td>A / D</td><td>← / →</td><td>左搖桿 / 十字鍵</td><td>左右箭頭鈕</td></tr>
-                <tr><td>加速下落</td><td>S</td><td>↓</td><td>左搖桿 下</td><td>向下箭頭鈕</td></tr>
-                <tr><td>旋轉方塊</td><td>W</td><td>↑</td><td>按鈕 2 (◯ / B)</td><td>旋轉鈕</td></tr>
-                <tr><td>確認答案</td><td>Q</td><td>Enter</td><td>按鈕 1 (A / ✕)</td><td>確認鈕</td></tr>
+                <tr><th>功能</th><th>鍵盤玩家 A/B</th><th>PS/2 搖桿</th><th>平板觸控</th></tr>
+                <tr><td>左右移動</td><td>A,D / ←,→</td><td>十字鍵 左右</td><td>中間並排按鈕</td></tr>
+                <tr><td>加速下落</td><td>S / ↓</td><td>左搖桿 下</td><td>最下方按鈕</td></tr>
+                <tr><td>旋轉方塊</td><td>W / ↑</td><td>按鈕 2 (B)</td><td>最上方按鈕</td></tr>
+                <tr><td>答題確認</td><td>Q / Enter</td><td>按鈕 1 (A)</td><td>直接點選選項</td></tr>
             </table>
 
             <div style="line-height: 1.6; font-size: 14px;">
-                <h3>⚔️ 遊戲規則</h3>
+                <h3>⚔️ 玩法重點</h3>
                 <ul>
-                    <li>消除行數即可攻擊對手，對手需解對一元一次方程式才能繼續。</li>
-                    <li>隨機出現含 "B" 的小格，消除後可獲得<strong>炸彈</strong>，落地後立即引爆周圍 5x5 範圍。</li>
-                    <li><strong>即時淘汰：</strong> 若受到攻擊後方塊頂到最上方即判定輸掉比賽。</li>
-                    <li><strong>係數限制：</strong> 所有題目之係數、常數與答案均保證不為 0。</li>
+                    <li>消除行數即可發動攻擊，對手需答對方程式。</li>
+                    <li>包含 "B" 字的小格被消除後會產生炸彈。</li>
+                    <li>炸彈碰到障礙會立即引爆 5x5 範圍。</li>
+                    <li><strong>即時結算：</strong> 垃圾行將方塊擠到頂部即判負。</li>
                 </ul>
             </div>
             <p style="text-align: center; color: #ffcc00; font-weight: bold;">請點擊右上角「開始戰鬥」啟動遊戲</p>
@@ -583,14 +577,6 @@
                 this.pos.x += dir; if (this.collide()) { this.pos.x -= dir; return false; } return true;
             }
 
-            selectMathOption(dirX, dirY) {
-                if (!this.isSolving) return;
-                let newIndex = this.selectedIndex;
-                if (dirX !== 0) { const row = Math.floor(newIndex / 2); newIndex = row * 2 + (newIndex % 2 + dirX + 2) % 2; }
-                if (dirY !== 0) newIndex = (newIndex + dirY * 2 + 4) % 4;
-                this.selectedIndex = newIndex; this.renderMath();
-            }
-
             rotate() {
                 if (this.isSolving || isGameOver || isPaused || this.isBombActive) return;
                 const m = this.matrix;
@@ -607,7 +593,7 @@
             sweep() {
                 let rowCount = 0, hasSpecial = false;
                 outer: for (let y = ROWS - 1; y >= 0; --y) {
-                    let full = true; for (let x = 0; x < COLS; ++x) { if (this.board[y][x] === 0) { full = false; break; } }
+                    let full = true; for (let x = 0; x < COLS; ++x) if (this.board[y][x] === 0) { full = false; break; }
                     if (!full) continue outer;
                     for (let x = 0; x < COLS; ++x) if (this.board[y][x] === 10) hasSpecial = true;
                     this.board.splice(y, 1); this.board.unshift(Array(COLS).fill(0));
@@ -634,15 +620,16 @@
             triggerMath(lines) {
                 if (lines < 1) return; 
                 this.isSolving = true; this.currentProblem = MathEngine.generateByLines(lines); this.selectedIndex = 0;
-                this.mathUI.style.display = 'block'; document.getElementById(`confirm-${this.id.toLowerCase()}-btn`).style.display = 'flex';
-                this.renderMath();
+                this.mathUI.style.display = 'block'; this.renderMath();
             }
 
             renderMath() {
                 const eqDiv = this.mathUI.querySelector('.math-equation'), optDiv = this.mathUI.querySelector('.math-options');
                 eqDiv.innerText = this.currentProblem.equation; optDiv.innerHTML = '';
                 this.currentProblem.options.forEach((opt, i) => {
-                    const btn = document.createElement('div'); btn.className = `option-btn ${i === this.selectedIndex ? 'selected' : ''}`; btn.innerText = opt; optDiv.appendChild(btn);
+                    const btn = document.createElement('div'); btn.className = 'option-btn'; btn.innerText = opt;
+                    btn.onclick = () => { this.selectedIndex = i; this.confirmAnswer(); };
+                    optDiv.appendChild(btn);
                 });
             }
 
@@ -650,7 +637,6 @@
                 if (!this.isSolving) return;
                 if (this.currentProblem.options[this.selectedIndex] === this.currentProblem.answer) {
                     this.isSolving = false; this.mathUI.style.display = 'none';
-                    document.getElementById(`confirm-${this.id.toLowerCase()}-btn`).style.display = 'none';
                 } else { this.receiveAttack(1); this.currentProblem = MathEngine.generateByLines(1); this.renderMath(); }
             }
 
@@ -698,22 +684,17 @@
             if (e) e.preventDefault(); 
             const p = (pID === 'A') ? playerA : playerB;
             if (action === 'left') p.touchLeft = isPressed; if (action === 'right') p.touchRight = isPressed; if (action === 'down') p.touchDown = isPressed;
-            if (action === 'up' && isPressed) { if (p.isSolving) p.selectMathOption(0, -1); else p.rotate(); }
-            if (action === 'down' && isPressed && p.isSolving) p.selectMathOption(0, 1);
+            if (action === 'up' && isPressed) p.rotate();
         }
 
         window.addEventListener('keydown', e => {
             if (isPaused || isGameOver) return;
             const code = e.code;
-            if (code === 'KeyA') { if (playerA.isSolving) playerA.selectMathOption(-1, 0); else playerA.keyboardLeft = true; }
-            if (code === 'KeyD') { if (playerA.isSolving) playerA.selectMathOption(1, 0); else playerA.keyboardRight = true; }
-            if (code === 'KeyS') { if (playerA.isSolving) playerA.selectMathOption(0, 1); else playerA.keyboardDown = true; }
-            if (code === 'KeyW') { if (playerA.isSolving) playerA.selectMathOption(0, -1); else playerA.rotate(); }
-            if ((code === 'KeyQ' || code === 'KeyE') && playerA.isSolving) playerA.confirmAnswer();
-            if (code === 'ArrowLeft') { if (playerB.isSolving) playerB.selectMathOption(-1, 0); else playerB.keyboardLeft = true; }
-            if (code === 'ArrowRight') { if (playerB.isSolving) playerB.selectMathOption(1, 0); else playerB.keyboardRight = true; }
-            if (code === 'ArrowDown') { if (playerB.isSolving) playerB.selectMathOption(0, 1); else playerB.keyboardDown = true; }
-            if (code === 'ArrowUp') { if (playerB.isSolving) playerB.selectMathOption(0, -1); else playerB.rotate(); }
+            if (code === 'KeyA') playerA.keyboardLeft = true; if (code === 'KeyD') playerA.keyboardRight = true;
+            if (code === 'KeyS') playerA.keyboardDown = true; if (code === 'KeyW') playerA.rotate();
+            if (code === 'KeyQ' && playerA.isSolving) playerA.confirmAnswer();
+            if (code === 'ArrowLeft') playerB.keyboardLeft = true; if (code === 'ArrowRight') playerB.keyboardRight = true;
+            if (code === 'ArrowDown') playerB.keyboardDown = true; if (code === 'ArrowUp') playerB.rotate();
             if (code === 'Enter' && playerB.isSolving) playerB.confirmAnswer();
         });
 
@@ -727,17 +708,11 @@
             const gamepads = navigator.getGamepads(); if (!gamepads) return;
             [playerA, playerB].forEach((p, i) => {
                 const gp = gamepads[i]; if (!gp) return;
-                const down = gp.axes[1] > 0.5 || gp.buttons[13]?.pressed, up = gp.axes[1] < -0.5 || gp.buttons[12]?.pressed, left = gp.axes[0] < -0.5 || gp.buttons[14]?.pressed, right = gp.axes[0] > 0.5 || gp.buttons[15]?.pressed, b0 = gp.buttons[0].pressed, b1 = gp.buttons[1].pressed;
+                const down = gp.axes[1] > 0.5 || gp.buttons[13]?.pressed, left = gp.axes[0] < -0.5 || gp.buttons[14]?.pressed, right = gp.axes[0] > 0.5 || gp.buttons[15]?.pressed, b0 = gp.buttons[0].pressed, b1 = gp.buttons[1].pressed;
                 if (!down) p.waitReleaseDown = false;
-                if (p.isSolving) {
-                    if (left && !p.lastGamepadState.left) p.selectMathOption(-1, 0); if (right && !p.lastGamepadState.right) p.selectMathOption(1, 0);
-                    if (down && !p.lastGamepadState.down) p.selectMathOption(0, 1); if (up && !p.lastGamepadState.up) p.selectMathOption(0, -1);
-                    if (b0 && !p.lastGamepadState.btn0) p.confirmAnswer();
-                } else {
-                    p.gamepadLeft = left; p.gamepadRight = right; p.gamepadDown = down && !p.waitReleaseDown;
-                    if (b1 && !p.lastGamepadState.btn1) p.rotate();
-                }
-                p.lastGamepadState = { left, right, up, down, btn0: b0, btn1: b1 };
+                if (p.isSolving) { if (b0 && !p.lastGamepadState.btn0) p.confirmAnswer(); }
+                else { p.gamepadLeft = left; p.gamepadRight = right; p.gamepadDown = down && !p.waitReleaseDown; if (b1 && !p.lastGamepadState.btn1) p.rotate(); }
+                p.lastGamepadState = { left, right, down, btn0: b0, btn1: b1 };
             });
         }
 
@@ -771,7 +746,7 @@
         function startGameSession() {
             isPaused = false; isGameOver = false; document.getElementById('help-overlay').style.display = 'none';
             document.getElementById('main-start-btn').style.display = 'none'; document.getElementById('restart-btn').style.display = 'block';
-            document.getElementById('touch-a').style.display = 'flex'; document.getElementById('touch-b').style.display = 'flex';
+            document.getElementById('touch-a').style.display = 'grid'; document.getElementById('touch-b').style.display = 'grid';
             if (audioEnabled) { currentBgmIndex = 0; playNextBgm(); }
         }
 

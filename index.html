@@ -93,7 +93,7 @@
         }
         .btn-audio { background: #533483; min-width: 70px; }
 
-        /* 遊戲主容器 */
+        /* 遊戲主容器 - 左右兩側佈局 */
         #game-container {
             display: flex;
             width: 100%;
@@ -114,7 +114,7 @@
             width: 50%;
             height: 100%;
             position: relative;
-            gap: 10px;
+            gap: 15px;
         }
 
         #player-b {
@@ -157,7 +157,7 @@
         .info-label { font-size: 10px; color: #ccc; }
         .info-value { font-size: 14px; font-weight: bold; color: #00d4ff; }
 
-        /* 複刻圖片配置的觸控按鈕區 */
+        /* 集中式控制按鈕區 */
         .touch-controls {
             display: none; 
             grid-template-columns: repeat(2, 75px); /* 兩欄佈局 */
@@ -193,7 +193,7 @@
         .t-btn.right { grid-column: 2; grid-row: 2; border-left-width: 1px; border-top-left-radius: 0; border-bottom-left-radius: 0; }
         .t-btn.down { grid-column: span 2; grid-row: 3; }
 
-        /* 解題畫面 */
+        /* 方程式解題區 */
         .math-overlay {
             position: absolute;
             top: 50%;
@@ -305,6 +305,12 @@
             text-shadow: 0 0 30px rgba(255, 204, 0, 0.8);
             animation: winPulse 1.5s infinite;
             text-align: center;
+        }
+
+        @keyframes winPulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
         }
 
         .petal {
@@ -422,7 +428,8 @@
     <!-- 結算畫面 -->
     <div id="global-over" class="global-game-over">
         <div id="win-msg" class="win-celebration">🏆 恭喜 玩家 獲勝！ 🏆</div>
-        <button class="btn btn-help" style="margin-top:40px; padding: 15px 40px; font-size: 20px; color: white;" onclick="location.reload()">重新對決</button>
+        <!-- 修正點：調高重新對決按鈕的 z-index 並加入觸控支援 -->
+        <button class="btn btn-help" style="margin-top:40px; padding: 15px 40px; font-size: 20px; color: white; position: relative; z-index: 2120;" onclick="location.reload()" ontouchstart="location.reload()">重新對決</button>
     </div>
 
     <div id="help-overlay">
@@ -636,7 +643,8 @@
             confirmAnswer() {
                 if (!this.isSolving) return;
                 if (this.currentProblem.options[this.selectedIndex] === this.currentProblem.answer) {
-                    this.isSolving = false; this.mathUI.style.display = 'none';
+                    this.isSolving = false;
+                    this.mathUI.style.display = 'none';
                 } else { this.receiveAttack(1); this.currentProblem = MathEngine.generateByLines(1); this.renderMath(); }
             }
 

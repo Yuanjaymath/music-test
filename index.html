@@ -93,7 +93,7 @@
         }
         .btn-audio { background: #533483; min-width: 70px; }
 
-        /* 遊戲主容器 - 左右兩側佈局 */
+        /* 遊戲主容器 */
         #game-container {
             display: flex;
             width: 100%;
@@ -160,8 +160,8 @@
         /* 集中式控制按鈕區 */
         .touch-controls {
             display: none; 
-            grid-template-columns: repeat(2, 75px); /* 兩欄佈局 */
-            grid-template-rows: 70px 70px 70px;    /* 三列佈局 */
+            grid-template-columns: repeat(2, 75px); 
+            grid-template-rows: 70px 70px 70px;    
             gap: 4px;
             padding: 10px;
             background: rgba(255, 255, 255, 0.05);
@@ -187,38 +187,41 @@
             transform: scale(0.95);
         }
 
-        /* 圖片樣式對應位置 */
         .t-btn.up { grid-column: span 2; grid-row: 1; font-size: 18px; font-weight: bold; color: #00ffcc; }
         .t-btn.left { grid-column: 1; grid-row: 2; border-right-width: 1px; border-top-right-radius: 0; border-bottom-right-radius: 0; }
         .t-btn.right { grid-column: 2; grid-row: 2; border-left-width: 1px; border-top-left-radius: 0; border-bottom-left-radius: 0; }
         .t-btn.down { grid-column: span 2; grid-row: 3; }
 
-        /* 方程式解題區 */
+        /* 方程式解題區 - 擴大小視窗並固定單行呈現 */
         .math-overlay {
             position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            width: 100%; 
-            background: rgba(15, 52, 96, 0.98);
+            width: 320px; 
+            background: rgba(10, 30, 60, 0.98);
             border: 4px solid var(--text-color);
             border-radius: 15px;
-            padding: 10px;
+            padding: 20px 10px;
             text-align: center;
             display: none; 
-            z-index: 50;
+            z-index: 500;
             box-shadow: 0 0 50px rgba(0,0,0,0.9);
         }
 
         .math-equation {
-            font-size: 24px;
-            margin-bottom: 15px;
-            color: #fff;
-            background: #1a1a2e;
-            padding: 12px;
-            border-radius: 5px;
-            word-break: break-all;
+            font-size: 26px; 
+            margin-bottom: 20px;
+            color: #00ffcc;
+            background: #000;
+            padding: 15px 10px;
+            border-radius: 8px;
+            word-break: keep-all;
+            white-space: nowrap; 
+            overflow: hidden;
+            text-overflow: ellipsis; 
             font-weight: bold;
+            border: 1px solid #333;
         }
 
         .math-options {
@@ -228,20 +231,24 @@
         }
 
         .option-btn {
-            padding: 20px 5px;
+            padding: 15px 5px;
             background: #533483;
             border: 2px solid rgba(255,255,255,0.2);
             color: white;
             border-radius: 12px;
             font-size: 22px;
             cursor: pointer;
+            transition: all 0.2s;
         }
 
-        .option-btn:active {
+        .option-btn.selected {
             background: #e94560;
             border-color: #00ffcc;
+            transform: scale(1.05);
+            box-shadow: 0 0 15px rgba(233, 69, 96, 0.5);
         }
 
+        /* 說明視窗優化 */
         #help-overlay {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -254,27 +261,34 @@
 
         .help-content {
             background: #1a1a2e;
-            padding: 25px;
+            padding: 30px;
             border-radius: 20px;
-            max-width: 800px;
+            max-width: 900px;
             width: 95%;
             max-height: 85vh;
             overflow-y: auto;
             border: 2px solid #e94560;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            box-sizing: border-box;
         }
 
         .help-table {
             width: 100%;
             border-collapse: collapse;
-            margin: 10px 0;
+            margin: 15px 0;
             font-size: 14px;
+            color: #eee;
         }
         .help-table th, .help-table td {
             border: 1px solid #333;
-            padding: 10px;
+            padding: 12px;
             text-align: left;
         }
-        .help-table th { background: #0f3460; }
+        .help-table th { background: #0f3460; color: #00ffcc; font-weight: bold; }
+        .help-table ul { margin: 0; padding-left: 20px; }
+        .help-table li { margin-bottom: 5px; }
 
         #flash-overlay {
             position: fixed;
@@ -425,34 +439,37 @@
         </div>
     </div>
 
-    <!-- 結算畫面 -->
+    <!-- 結算畫面 (僅在遊戲結束時顯示) -->
     <div id="global-over" class="global-game-over">
-        <div id="win-msg" class="win-celebration">🏆 恭喜 玩家 獲勝！ 🏆</div>
-        <!-- 修正點：調高重新對決按鈕的 z-index 並加入觸控支援 -->
+        <div id="win-msg" class="win-celebration">🏆 恭喜 玩家 獲得最終勝利！ 🏆</div>
         <button class="btn btn-help" style="margin-top:40px; padding: 15px 40px; font-size: 20px; color: white; position: relative; z-index: 2120;" onclick="location.reload()" ontouchstart="location.reload()">重新對決</button>
     </div>
 
     <div id="help-overlay">
         <div class="help-content">
-            <h2 style="text-align: center; color: var(--text-color);">《一元一次俄羅斯》操作說明</h2>
+            <h2 style="text-align: center; color: var(--text-color);">一元一次俄羅斯(東興ㄚ杰製)</h2>
             
             <table class="help-table">
-                <tr><th>功能</th><th>鍵盤玩家 A/B</th><th>PS/2 搖桿</th><th>平板觸控</th></tr>
-                <tr><td>左右移動</td><td>A,D / ←,→</td><td>十字鍵 左右</td><td>中間並排按鈕</td></tr>
-                <tr><td>加速下落</td><td>S / ↓</td><td>左搖桿 下</td><td>最下方按鈕</td></tr>
-                <tr><td>旋轉方塊</td><td>W / ↑</td><td>按鈕 2 (B)</td><td>最上方按鈕</td></tr>
-                <tr><td>答題確認</td><td>Q / Enter</td><td>按鈕 1 (A)</td><td>直接點選選項</td></tr>
+                <thead>
+                    <tr><th>功能</th><th>鍵盤玩家 A/B</th><th>PS/2 搖桿</th><th>平板觸控</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>左右移動</td><td>A,D / ←,→</td><td>十字鍵 左右</td><td>中間並排按鈕</td></tr>
+                    <tr><td>加速下落</td><td>S / ↓</td><td>左搖桿 下</td><td>最下方按鈕</td></tr>
+                    <tr><td>旋轉方塊</td><td>W / ↑</td><td>按鈕 2 (B)</td><td>最上方按鈕</td></tr>
+                    <tr><td>答題選擇</td><td>WASD / 方向鍵</td><td>十字鍵</td><td><strong>直接點選選項</strong></td></tr>
+                    <tr><td>答題確認</td><td>Q / Enter</td><td>按鈕 1 (A)</td><td>無需按鈕</td></tr>
+                    <tr><th colspan="4" style="text-align:center; background:#16213e; color:#00ffcc;">遊戲規則與重點</th></tr>
+                    <tr><td colspan="4">
+                        <ul>
+                            <li>消除行數即可發動攻擊，對手需答對方程式方可恢復操作。</li>
+                            <li>包含 "B" 字的小格被消除後會產生炸彈，落地立即引爆 5x5 範圍。</li>
+                            <li><strong>敗戰判定：</strong> 1. 新方塊產生時位置被佔據。 2. 被垃圾行推擠導致方塊溢出頂部。</li>
+                            <li>所有題目之係數、常數與答案均保證不為 0。</li>
+                        </ul>
+                    </td></tr>
+                </tbody>
             </table>
-
-            <div style="line-height: 1.6; font-size: 14px;">
-                <h3>⚔️ 玩法重點</h3>
-                <ul>
-                    <li>消除行數即可發動攻擊，對手需答對方程式。</li>
-                    <li>包含 "B" 字的小格被消除後會產生炸彈。</li>
-                    <li>炸彈碰到障礙會立即引爆 5x5 範圍。</li>
-                    <li><strong>即時結算：</strong> 垃圾行將方塊擠到頂部即判負。</li>
-                </ul>
-            </div>
             <p style="text-align: center; color: #ffcc00; font-weight: bold;">請點擊右上角「開始戰鬥」啟動遊戲</p>
         </div>
     </div>
@@ -541,7 +558,11 @@
                 if (this.bombIsNext) { this.matrix = [[11]]; this.isBombActive = true; this.bombIsNext = false; }
                 else { this.matrix = this.nextMatrix; this.isBombActive = false; this.setNextPiece(); }
                 this.pos.y = 0; this.pos.x = (COLS / 2 | 0) - (this.matrix[0].length / 2 | 0);
-                this.waitReleaseDown = true; if (this.collide()) endGame(this.id); this.drawNext();
+                this.waitReleaseDown = true; 
+                
+                // 新方塊產生位置發生碰撞判定敗戰
+                if (this.collide()) endGame(this.id); 
+                this.drawNext();
             }
 
             collide(offset = { x: 0, y: 0 }) {
@@ -580,7 +601,8 @@
             }
 
             move(dir) {
-                if (isGameOver || isPaused || this.isSolving) return;
+                if (isGameOver || isPaused) return;
+                if (this.isSolving) { this.selectMathOption(dir, 0); return; }
                 this.pos.x += dir; if (this.collide()) { this.pos.x -= dir; return false; } return true;
             }
 
@@ -617,10 +639,17 @@
 
             receiveAttack(lines) {
                 for (let i = 0; i < lines; i++) {
+                    // 修改處：在推送垃圾行時，檢查是否有方塊被擠出頂部或發生碰撞（即便在解題中）
                     const topRowOccupied = this.board[0].some(val => val !== 0);
                     const row = Array(COLS).fill(8); row[Math.floor(Math.random() * COLS)] = 0;
-                    this.board.shift(); this.board.push(row);
-                    if (topRowOccupied || this.collide()) { endGame(this.id); return; }
+                    this.board.shift();
+                    this.board.push(row);
+                    
+                    // 如果方塊被擠出頂部，或是新棋盤與當前方塊碰撞，立即判輸
+                    if (topRowOccupied || this.collide()) {
+                        endGame(this.id);
+                        return; 
+                    }
                 }
             }
 
@@ -634,10 +663,18 @@
                 const eqDiv = this.mathUI.querySelector('.math-equation'), optDiv = this.mathUI.querySelector('.math-options');
                 eqDiv.innerText = this.currentProblem.equation; optDiv.innerHTML = '';
                 this.currentProblem.options.forEach((opt, i) => {
-                    const btn = document.createElement('div'); btn.className = 'option-btn'; btn.innerText = opt;
+                    const btn = document.createElement('div'); btn.className = `option-btn ${i === this.selectedIndex ? 'selected' : ''}`; btn.innerText = opt;
                     btn.onclick = () => { this.selectedIndex = i; this.confirmAnswer(); };
                     optDiv.appendChild(btn);
                 });
+            }
+
+            selectMathOption(dirX, dirY) {
+                if (!this.isSolving) return;
+                let newIndex = this.selectedIndex;
+                if (dirX !== 0) { const row = Math.floor(newIndex / 2); newIndex = row * 2 + (newIndex % 2 + dirX + 2) % 2; }
+                if (dirY !== 0) newIndex = (newIndex + dirY * 2 + 4) % 4;
+                this.selectedIndex = newIndex; this.renderMath();
             }
 
             confirmAnswer() {
@@ -691,18 +728,29 @@
         function touchInput(e, pID, action, isPressed) {
             if (e) e.preventDefault(); 
             const p = (pID === 'A') ? playerA : playerB;
-            if (action === 'left') p.touchLeft = isPressed; if (action === 'right') p.touchRight = isPressed; if (action === 'down') p.touchDown = isPressed;
-            if (action === 'up' && isPressed) p.rotate();
+            if (action === 'left') { if (p.isSolving && isPressed) p.selectMathOption(-1, 0); else p.touchLeft = isPressed; }
+            if (action === 'right') { if (p.isSolving && isPressed) p.selectMathOption(1, 0); else p.touchRight = isPressed; }
+            if (action === 'down') p.touchDown = isPressed;
+            if (action === 'up' && isPressed) {
+                if (p.isSolving) p.selectMathOption(0, -1);
+                else p.rotate();
+            }
+            if (action === 'down' && isPressed && p.isSolving) p.selectMathOption(0, 1);
         }
 
         window.addEventListener('keydown', e => {
             if (isPaused || isGameOver) return;
             const code = e.code;
-            if (code === 'KeyA') playerA.keyboardLeft = true; if (code === 'KeyD') playerA.keyboardRight = true;
-            if (code === 'KeyS') playerA.keyboardDown = true; if (code === 'KeyW') playerA.rotate();
+            if (code === 'KeyA') { if (playerA.isSolving) playerA.selectMathOption(-1, 0); else playerA.keyboardLeft = true; }
+            if (code === 'KeyD') { if (playerA.isSolving) playerA.selectMathOption(1, 0); else playerA.keyboardRight = true; }
+            if (code === 'KeyS') { if (playerA.isSolving) playerA.selectMathOption(0, 1); else playerA.keyboardDown = true; }
+            if (code === 'KeyW') { if (playerA.isSolving) playerA.selectMathOption(0, -1); else playerA.rotate(); }
             if (code === 'KeyQ' && playerA.isSolving) playerA.confirmAnswer();
-            if (code === 'ArrowLeft') playerB.keyboardLeft = true; if (code === 'ArrowRight') playerB.keyboardRight = true;
-            if (code === 'ArrowDown') playerB.keyboardDown = true; if (code === 'ArrowUp') playerB.rotate();
+
+            if (code === 'ArrowLeft') { if (playerB.isSolving) playerB.selectMathOption(-1, 0); else playerB.keyboardLeft = true; }
+            if (code === 'ArrowRight') { if (playerB.isSolving) playerB.selectMathOption(1, 0); else playerB.keyboardRight = true; }
+            if (code === 'ArrowDown') { if (playerB.isSolving) playerB.selectMathOption(0, 1); else playerB.keyboardDown = true; }
+            if (code === 'ArrowUp') { if (playerB.isSolving) playerB.selectMathOption(0, -1); else playerB.rotate(); }
             if (code === 'Enter' && playerB.isSolving) playerB.confirmAnswer();
         });
 
@@ -716,11 +764,17 @@
             const gamepads = navigator.getGamepads(); if (!gamepads) return;
             [playerA, playerB].forEach((p, i) => {
                 const gp = gamepads[i]; if (!gp) return;
-                const down = gp.axes[1] > 0.5 || gp.buttons[13]?.pressed, left = gp.axes[0] < -0.5 || gp.buttons[14]?.pressed, right = gp.axes[0] > 0.5 || gp.buttons[15]?.pressed, b0 = gp.buttons[0].pressed, b1 = gp.buttons[1].pressed;
+                const down = gp.axes[1] > 0.5 || gp.buttons[13]?.pressed, up = gp.axes[1] < -0.5 || gp.buttons[12]?.pressed, left = gp.axes[0] < -0.5 || gp.buttons[14]?.pressed, right = gp.axes[0] > 0.5 || gp.buttons[15]?.pressed, b0 = gp.buttons[0].pressed, b1 = gp.buttons[1].pressed;
                 if (!down) p.waitReleaseDown = false;
-                if (p.isSolving) { if (b0 && !p.lastGamepadState.btn0) p.confirmAnswer(); }
-                else { p.gamepadLeft = left; p.gamepadRight = right; p.gamepadDown = down && !p.waitReleaseDown; if (b1 && !p.lastGamepadState.btn1) p.rotate(); }
-                p.lastGamepadState = { left, right, down, btn0: b0, btn1: b1 };
+                if (p.isSolving) {
+                    if (left && !p.lastGamepadState.left) p.selectMathOption(-1, 0); if (right && !p.lastGamepadState.right) p.selectMathOption(1, 0);
+                    if (down && !p.lastGamepadState.down) p.selectMathOption(0, 1); if (up && !p.lastGamepadState.up) p.selectMathOption(0, -1);
+                    if (b0 && !p.lastGamepadState.btn0) p.confirmAnswer();
+                } else {
+                    p.gamepadLeft = left; p.gamepadRight = right; p.gamepadDown = down && !p.waitReleaseDown;
+                    if (b1 && !p.lastGamepadState.btn1) p.rotate();
+                }
+                p.lastGamepadState = { left, right, up, down, btn0: b0, btn1: b1 };
             });
         }
 
@@ -739,7 +793,7 @@
 
         function endGame(loserId) {
             if (isGameOver) return; isGameOver = true; const winner = loserId === 'A' ? 'B' : 'A';
-            document.getElementById('win-msg').innerText = `🏆 恭喜 玩家 ${winner} 獲勝！ 🏆`; document.getElementById('global-over').style.display = 'flex';
+            document.getElementById('win-msg').innerText = `🏆 恭喜 玩家 ${winner} 獲得最終勝利！ 🏆`; document.getElementById('global-over').style.display = 'flex';
             const colors = ['#ffc0cb', '#ff69b4', '#ff1493', '#fff', '#ffd700'];
             for (let i = 0; i < 100; i++) {
                 const petal = document.createElement('div'); petal.className = 'petal';

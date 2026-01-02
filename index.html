@@ -209,6 +209,14 @@
             box-shadow: 0 0 50px rgba(0,0,0,0.9);
         }
 
+        .math-status {
+            font-size: 18px;
+            color: #ffcc00;
+            margin-bottom: 10px;
+            font-weight: bold;
+            text-shadow: 0 0 10px rgba(0,0,0,0.5);
+        }
+
         .math-equation {
             font-size: 26px; 
             margin-bottom: 20px;
@@ -300,10 +308,11 @@
             transition: opacity 0.05s;
         }
 
+        /* 遊戲結束結算畫面 - 背景透明度調整以顯示盤面 */
         .global-game-over {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.9);
+            background: rgba(0,0,0,0.65); /* 降低透明度讓玩家看到盤面 */
             display: none;
             flex-direction: column;
             justify-content: center;
@@ -316,7 +325,7 @@
             color: #ffcc00; 
             font-size: 50px; 
             font-weight: 900;
-            text-shadow: 0 0 30px rgba(255, 204, 0, 0.8);
+            text-shadow: 0 0 30px rgba(255, 204, 0, 0.8), 2px 2px 4px #000;
             animation: winPulse 1.5s infinite;
             text-align: center;
         }
@@ -372,7 +381,6 @@
         </div>
         
         <div class="title-group">
-            <!-- 標題修改為指定名稱 -->
             <div style="font-weight: bold; font-size: 18px;">🕹️ 一元一次俄羅斯(東興ㄚ杰製)</div>
         </div>
 
@@ -405,6 +413,7 @@
                     </div>
                 </div>
                 <div id="math-a" class="math-overlay">
+                    <div class="math-status" id="status-a"></div>
                     <div class="math-equation" id="eq-a">x + 5 = 12</div>
                     <div class="math-options" id="options-a"></div>
                 </div>
@@ -433,6 +442,7 @@
                     </div>
                 </div>
                 <div id="math-b" class="math-overlay">
+                    <div class="math-status" id="status-b"></div>
                     <div class="math-equation" id="eq-b">2x - 4 = 10</div>
                     <div class="math-options" id="options-b"></div>
                 </div>
@@ -448,7 +458,6 @@
 
     <div id="help-overlay">
         <div class="help-content">
-            <!-- 標題修改為指定名稱 -->
             <h2 style="text-align: center; color: var(--text-color);">一元一次俄羅斯(東興ㄚ杰製)</h2>
             
             <table class="help-table">
@@ -467,6 +476,7 @@
                             <li>消除行數即可發動攻擊，對手需答對方程式方可恢復操作。</li>
                             <li>包含 "B" 字的小格被消除後會產生炸彈，落地立即引爆 5x5 範圍。</li>
                             <li><strong>敗戰判定：</strong> 1. 新方塊產生時位置被佔據。 2. 被垃圾行推擠導致方塊溢出頂部。</li>
+                            <li><strong>懲罰機制：</strong> 若數學答錯，系統將<strong>處罰增加一行垃圾行</strong>並換題，難度維持不變。</li>
                             <li>所有題目之係數、常數與答案均保證不為 0。</li>
                         </ul>
                     </td></tr>
@@ -488,7 +498,24 @@
         let bgmPlayer = new Audio(), sfxPlayer = new Audio();
         
         function updateVolume(val) { currentVolume = parseFloat(val); bgmPlayer.volume = currentVolume; sfxPlayer.volume = currentVolume; }
-        function toggleFullScreen() { if (!document.fullscreenElement) document.documentElement.requestFullscreen(); else if (document.exitFullscreen) document.exitFullscreen(); }
+        
+        function toggleFullScreen() {
+            try {
+                if (!document.fullscreenElement) {
+                    const promise = document.documentElement.requestFullscreen();
+                    if (promise !== undefined) {
+                        promise.catch(err => {
+                            console.warn("Fullscreen blocked by policy.");
+                        });
+                    }
+                } else {
+                    if (document.exitFullscreen) document.exitFullscreen();
+                }
+            } catch (e) {
+                console.warn("Fullscreen operation failed.", e);
+            }
+        }
+
         function playStonefall() { if (sfxEnabled) { sfxPlayer.src = SFX_FILE; sfxPlayer.volume = currentVolume; sfxPlayer.play().catch(() => {}); } }
         async function flashScreen() {
             const overlay = document.getElementById('flash-overlay'); playStonefall();
@@ -531,6 +558,9 @@
                 this.id = id; this.canvas = document.getElementById(canvasId); this.ctx = this.canvas.getContext('2d');
                 this.nextCanvas = document.getElementById(nextId); this.nextCtx = this.nextCanvas.getContext('2d');
                 this.scoreElement = document.getElementById(scoreId); this.mathUI = document.getElementById(mathId);
+                
+                this.mathStatus = this.mathUI.querySelector('.math-status');
+                
                 this.board = Array.from({ length: ROWS }, () => Array(COLS).fill(0));
                 this.score = 0; this.pos = { x: 0, y: 0 }; this.matrix = null; this.nextMatrix = null;
                 this.isBombActive = false; this.bombIsNext = false; 
@@ -542,6 +572,7 @@
                 this.keys = { left: false, right: false }; 
                 this.dropCounter = 0; this.dropInterval = 1000;
                 this.isSolving = false; this.currentProblem = null; this.selectedIndex = 0;
+                this.currentMathDifficulty = 1; 
                 this.lastGamepadState = { left: false, right: false, up: false, down: false, btn0: false, btn1: false };
                 this.setNextPiece(); this.resetPiece();
             }
@@ -561,7 +592,11 @@
                 else { this.matrix = this.nextMatrix; this.isBombActive = false; this.setNextPiece(); }
                 this.pos.y = 0; this.pos.x = (COLS / 2 | 0) - (this.matrix[0].length / 2 | 0);
                 this.waitReleaseDown = true; 
-                if (this.collide()) endGame(this.id); 
+                
+                // 敗戰判定 1：新方塊產生時位置被佔據
+                if (this.collide()) {
+                    endGame(this.id); 
+                }
                 this.drawNext();
             }
 
@@ -639,20 +674,49 @@
 
             receiveAttack(lines) {
                 for (let i = 0; i < lines; i++) {
+                    // 檢查棋盤是否有方塊溢出
                     const topRowOccupied = this.board[0].some(val => val !== 0);
                     const row = Array(COLS).fill(8); row[Math.floor(Math.random() * COLS)] = 0;
+                    
                     this.board.shift();
                     this.board.push(row);
-                    if (topRowOccupied || this.collide()) {
+                    
+                    // 重要：方塊隨棋盤向上同步位移
+                    this.pos.y--;
+                    
+                    // 敗戰判定點：
+                    // 1. 棋盤溢出 (頂部有方塊離開界限)
+                    // 2. 正在回答問題時 (Rule 2)，方塊固體部分被頂出界 (pos.y < 0 的實際固體檢測)
+                    if (topRowOccupied) {
                         endGame(this.id);
                         return; 
+                    }
+
+                    if (this.isSolving) {
+                        const solidPartPushedOut = this.matrix.some((rowArr, dy) => 
+                            rowArr.some((val, dx) => val !== 0 && (this.pos.y + dy) < 0)
+                        );
+                        if (solidPartPushedOut || this.collide()) {
+                            endGame(this.id);
+                            return;
+                        }
                     }
                 }
             }
 
             triggerMath(lines) {
-                if (lines < 1) return; 
-                this.isSolving = true; this.currentProblem = MathEngine.generateByLines(lines); this.selectedIndex = 0;
+                // 若遊戲已結束，不應再彈出問題框
+                if (lines < 1 || isGameOver) return; 
+                this.isSolving = true; 
+                this.currentMathDifficulty = lines; 
+                this.currentProblem = MathEngine.generateByLines(lines); 
+                this.selectedIndex = 0;
+                
+                if (this.mathStatus) {
+                    this.mathStatus.innerText = "⚠️ 受到 " + lines + " 行垃圾行攻擊！";
+                    this.mathStatus.style.color = "#ffcc00";
+                }
+                
                 this.mathUI.style.display = 'block'; this.renderMath();
             }
 
@@ -679,7 +743,15 @@
                 if (this.currentProblem.options[this.selectedIndex] === this.currentProblem.answer) {
                     this.isSolving = false;
                     this.mathUI.style.display = 'none';
-                } else { this.receiveAttack(1); this.currentProblem = MathEngine.generateByLines(1); this.renderMath(); }
+                } else { 
+                    this.receiveAttack(1); 
+                    if (this.mathStatus) {
+                        this.mathStatus.innerText = "❌ 答錯！懲罰增加 1 行垃圾行";
+                        this.mathStatus.style.color = "#ff4d4d";
+                    }
+                    this.currentProblem = MathEngine.generateByLines(this.currentMathDifficulty); 
+                    this.renderMath(); 
+                }
             }
 
             showPopScore(val) {
@@ -790,6 +862,13 @@
 
         function endGame(loserId) {
             if (isGameOver) return; isGameOver = true; const winner = loserId === 'A' ? 'B' : 'A';
+            
+            // 修正點：對戰結束時立即隱藏所有解題視窗
+            playerA.isSolving = false;
+            playerA.mathUI.style.display = 'none';
+            playerB.isSolving = false;
+            playerB.mathUI.style.display = 'none';
+
             document.getElementById('win-msg').innerText = `🏆 恭喜 玩家 ${winner} 獲得最終勝利！ 🏆`; document.getElementById('global-over').style.display = 'flex';
             const colors = ['#ffc0cb', '#ff69b4', '#ff1493', '#fff', '#ffd700'];
             for (let i = 0; i < 100; i++) {

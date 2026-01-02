@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>一元一次俄羅斯(東興ㄚ杰)</title>
+    <title>一元一次俄羅斯(東興ㄚ杰製)</title>
     <style>
         :root {
             --bg-color: #1a1a2e;
@@ -271,7 +271,7 @@
             background: #1a1a2e;
             padding: 30px;
             border-radius: 20px;
-            max-width: 800px;
+            max-width: 900px;
             width: 95%;
             max-height: 85vh;
             overflow-y: auto;
@@ -470,14 +470,20 @@
                     <tr><td>旋轉方塊</td><td>W / ↑</td><td>按鈕 2 (B)</td><td>最上方按鈕</td></tr>
                     <tr><td>答題選擇</td><td>WASD / 方向鍵</td><td>十字鍵</td><td><strong>直接點選選項</strong></td></tr>
                     <tr><td>答題確認</td><td>Q / Enter</td><td>按鈕 1 (A)</td><td>無需按鈕</td></tr>
-                    <tr><th colspan="4" style="text-align:center; background:#16213e; color:#00ffcc;">遊戲規則與重點</th></tr>
+                    <tr><th colspan="4" style="text-align:center; background:#16213e; color:#00ffcc;">【核心遊戲規則】</th></tr>
                     <tr><td colspan="4">
                         <ul>
-                            <li>消除行數即可發動攻擊，對手需答對方程式方可恢復操作。</li>
-                            <li>包含 "B" 字的小格被消除後會產生炸彈，落地立即引爆 5x5 範圍。</li>
-                            <li><strong>敗戰判定：</strong> 1. 新方塊產生時位置被佔據。 2. 被垃圾行推擠導致方塊溢出頂部。</li>
-                            <li><strong>懲罰機制：</strong> 若數學答錯，系統將<strong>處罰增加一行垃圾行</strong>並換題，難度維持不變。</li>
-                            <li>所有題目之係數、常數與答案均保證不為 0。</li>
+                            <li><strong>消行攻擊效果：</strong>
+                                <ul>
+                                    <li>消除 <strong>1</strong> 行：對手增加 <strong>3</strong> 行垃圾行，發送「基礎問題」。</li>
+                                    <li>消除 <strong>2</strong> 行：對手增加 <strong>5</strong> 行垃圾行，發送「進階問題」。</li>
+                                    <li>消除 <strong>3</strong> 行：對手增加 <strong>6</strong> 行垃圾行，發送「困難問題」。</li>
+                                    <li>消除 <strong>4</strong> 行：對手增加 <strong>7</strong> 行垃圾行，發送「挑戰問題」。</li>
+                                </ul>
+                            </li>
+                            <li><strong>答題懲罰機制：</strong>數學答錯將處罰<strong>增加 4 行垃圾行</strong>並更換同難度新題。</li>
+                            <li><strong>炸彈功能：</strong>消除含 "B" 字的小格產生炸彈，落地引爆 5x5 範圍。</li>
+                            <li><strong>重要提醒：</strong>所有題目係數與答案皆不為 0。</li>
                         </ul>
                     </td></tr>
                 </tbody>
@@ -531,20 +537,28 @@
         bgmPlayer.onended = playNextBgm;
 
         class MathEngine {
-            static generateByLines(lines) {
+            static generateByDifficulty(diff) {
                 let a, b, c, d, f, x, eq;
                 while (true) { x = (Math.floor(Math.random() * 10) + 1) * (Math.random() > 0.5 ? 1 : -1); if (x !== 0) break; }
-                if (lines === 1) {
+                
+                if (diff === 1) { // 基礎: x + a = b
                     while (true) { a = (Math.floor(Math.random() * 15) + 1) * (Math.random() > 0.5 ? 1 : -1); b = x + a; if (a !== 0 && b !== 0) break; }
                     eq = `x ${a >= 0 ? '+' : '-'} ${Math.abs(a)} = ${b}`;
-                } else if (lines === 2) {
+                } else if (diff === 2) { // 進階: ax + b = c
                     while (true) { a = (Math.floor(Math.random() * 5) + 2) * (Math.random() > 0.5 ? 1 : -1); b = (Math.floor(Math.random() * 10) + 1) * (Math.random() > 0.5 ? 1 : -1); c = a * x + b; if (a !== 0 && b !== 0 && c !== 0) break; }
                     eq = `${a}x ${b >= 0 ? '+' : '-'} ${Math.abs(b)} = ${c}`;
-                } else if (lines === 3) {
+                } else if (diff === 3) { // 困難: a(x + b) = c
                     while (true) { a = (Math.floor(Math.random() * 4) + 2) * (Math.random() > 0.5 ? 1 : -1); b = (Math.floor(Math.random() * 6) + 1) * (Math.random() > 0.5 ? 1 : -1); c = a * (x + b); if (a !== 0 && b !== 0 && c !== 0) break; }
                     eq = `${a}(x ${b >= 0 ? '+' : '-'} ${Math.abs(b)}) = ${c}`;
-                } else {
-                    while (true) { a = Math.floor(Math.random() * 3) + 2; b = Math.floor(Math.random() * 3) + 2; c = (Math.floor(Math.random() * 5) + 1) * (Math.random() > 0.5 ? 1 : -1); d = (Math.floor(Math.random() * 5) + 1) * (Math.random() > 0.5 ? 1 : -1); f = (a * b - 1) * x + a * c + d; if (a !== 0 && b !== 0 && c !== 0 && d !== 0 && f !== 0) break; }
+                } else { // 挑戰: a(bx + c) + d = x + f
+                    while (true) { 
+                        a = Math.floor(Math.random() * 3) + 2; 
+                        b = Math.floor(Math.random() * 3) + 2; 
+                        c = (Math.floor(Math.random() * 5) + 1) * (Math.random() > 0.5 ? 1 : -1); 
+                        d = (Math.floor(Math.random() * 5) + 1) * (Math.random() > 0.5 ? 1 : -1); 
+                        f = (a * b - 1) * x + a * c + d; 
+                        if (a !== 0 && b !== 0 && c !== 0 && d !== 0 && f !== 0) break; 
+                    }
                     const cSign = c >= 0 ? '+' : '-'; const dSign = d >= 0 ? '+' : '-'; const fSign = f >= 0 ? '+' : '-';
                     eq = `${a}(${b}x ${cSign} ${Math.abs(c)}) ${dSign} ${Math.abs(d)} = x ${fSign} ${Math.abs(f)}`;
                 }
@@ -558,9 +572,7 @@
                 this.id = id; this.canvas = document.getElementById(canvasId); this.ctx = this.canvas.getContext('2d');
                 this.nextCanvas = document.getElementById(nextId); this.nextCtx = this.nextCanvas.getContext('2d');
                 this.scoreElement = document.getElementById(scoreId); this.mathUI = document.getElementById(mathId);
-                
                 this.mathStatus = this.mathUI.querySelector('.math-status');
-                
                 this.board = Array.from({ length: ROWS }, () => Array(COLS).fill(0));
                 this.score = 0; this.pos = { x: 0, y: 0 }; this.matrix = null; this.nextMatrix = null;
                 this.isBombActive = false; this.bombIsNext = false; 
@@ -592,11 +604,7 @@
                 else { this.matrix = this.nextMatrix; this.isBombActive = false; this.setNextPiece(); }
                 this.pos.y = 0; this.pos.x = (COLS / 2 | 0) - (this.matrix[0].length / 2 | 0);
                 this.waitReleaseDown = true; 
-                
-                // 敗戰判定 1：新方塊產生時位置被佔據
-                if (this.collide()) {
-                    endGame(this.id); 
-                }
+                if (this.collide()) endGame(this.id); 
                 this.drawNext();
             }
 
@@ -666,37 +674,24 @@
                 if (rowCount > 0) {
                     const scores = [0, 1, 5, 25, 100]; const add = scores[rowCount] || 0;
                     this.score += add; this.scoreElement.innerText = this.score; this.showPopScore(add);
+                    const attackLinesMap = [0, 3, 5, 6, 7];
+                    const attackLines = attackLinesMap[rowCount] || 0;
                     const opponent = (this.id === 'A') ? playerB : playerA;
-                    opponent.receiveAttack(rowCount); opponent.triggerMath(rowCount);
+                    opponent.receiveAttack(attackLines);
+                    opponent.triggerMath(rowCount); 
                     flashScreen(); if (hasSpecial) this.bombIsNext = true; 
                 }
             }
 
             receiveAttack(lines) {
                 for (let i = 0; i < lines; i++) {
-                    // 檢查棋盤是否有方塊溢出
                     const topRowOccupied = this.board[0].some(val => val !== 0);
                     const row = Array(COLS).fill(8); row[Math.floor(Math.random() * COLS)] = 0;
-                    
                     this.board.shift();
                     this.board.push(row);
-                    
-                    // 重要：方塊隨棋盤向上同步位移
-                    this.pos.y--;
-                    
-                    // 敗戰判定點：
-                    // 1. 棋盤溢出 (頂部有方塊離開界限)
-                    // 2. 正在回答問題時 (Rule 2)，方塊固體部分被頂出界 (pos.y < 0 的實際固體檢測)
-                    if (topRowOccupied) {
-                        endGame(this.id);
-                        return; 
-                    }
-
+                    this.pos.y--; 
                     if (this.isSolving) {
-                        const solidPartPushedOut = this.matrix.some((rowArr, dy) => 
-                            rowArr.some((val, dx) => val !== 0 && (this.pos.y + dy) < 0)
-                        );
-                        if (solidPartPushedOut || this.collide()) {
+                        if (topRowOccupied || this.collide()) {
                             endGame(this.id);
                             return;
                         }
@@ -704,19 +699,18 @@
                 }
             }
 
-            triggerMath(lines) {
-                // 若遊戲已結束，不應再彈出問題框
-                if (lines < 1 || isGameOver) return; 
+            triggerMath(diffIndex) {
+                if (diffIndex < 1 || isGameOver) return; 
                 this.isSolving = true; 
-                this.currentMathDifficulty = lines; 
-                this.currentProblem = MathEngine.generateByLines(lines); 
+                this.currentMathDifficulty = diffIndex; 
+                this.currentProblem = MathEngine.generateByDifficulty(diffIndex); 
                 this.selectedIndex = 0;
-                
+                const diffNames = ["", "基礎", "進階", "困難", "挑戰"];
+                const diffName = diffNames[diffIndex] || "挑戰";
                 if (this.mathStatus) {
-                    this.mathStatus.innerText = "⚠️ 受到 " + lines + " 行垃圾行攻擊！";
+                    this.mathStatus.innerText = `⚠️ 遭遇「${diffName}問題」攻擊！`;
                     this.mathStatus.style.color = "#ffcc00";
                 }
-                
                 this.mathUI.style.display = 'block'; this.renderMath();
             }
 
@@ -744,13 +738,15 @@
                     this.isSolving = false;
                     this.mathUI.style.display = 'none';
                 } else { 
-                    this.receiveAttack(1); 
-                    if (this.mathStatus) {
-                        this.mathStatus.innerText = "❌ 答錯！懲罰增加 1 行垃圾行";
-                        this.mathStatus.style.color = "#ff4d4d";
+                    this.receiveAttack(4); 
+                    if (!isGameOver) {
+                        if (this.mathStatus) {
+                            this.mathStatus.innerText = "❌ 答錯！懲罰增加 4 行垃圾行";
+                            this.mathStatus.style.color = "#ff4d4d";
+                        }
+                        this.currentProblem = MathEngine.generateByDifficulty(this.currentMathDifficulty); 
+                        this.renderMath(); 
                     }
-                    this.currentProblem = MathEngine.generateByLines(this.currentMathDifficulty); 
-                    this.renderMath(); 
                 }
             }
 
@@ -800,10 +796,7 @@
             if (action === 'left') { if (p.isSolving && isPressed) p.selectMathOption(-1, 0); else p.touchLeft = isPressed; }
             if (action === 'right') { if (p.isSolving && isPressed) p.selectMathOption(1, 0); else p.touchRight = isPressed; }
             if (action === 'down') p.touchDown = isPressed;
-            if (action === 'up' && isPressed) {
-                if (p.isSolving) p.selectMathOption(0, -1);
-                else p.rotate();
-            }
+            if (action === 'up' && isPressed) { if (p.isSolving) p.selectMathOption(0, -1); else p.rotate(); }
             if (action === 'down' && isPressed && p.isSolving) p.selectMathOption(0, 1);
         }
 
@@ -815,7 +808,6 @@
             if (code === 'KeyS') { if (playerA.isSolving) playerA.selectMathOption(0, 1); else playerA.keyboardDown = true; }
             if (code === 'KeyW') { if (playerA.isSolving) playerA.selectMathOption(0, -1); else playerA.rotate(); }
             if (code === 'KeyQ' && playerA.isSolving) playerA.confirmAnswer();
-
             if (code === 'ArrowLeft') { if (playerB.isSolving) playerB.selectMathOption(-1, 0); else playerB.keyboardLeft = true; }
             if (code === 'ArrowRight') { if (playerB.isSolving) playerB.selectMathOption(1, 0); else playerB.keyboardRight = true; }
             if (code === 'ArrowDown') { if (playerB.isSolving) playerB.selectMathOption(0, 1); else playerB.keyboardDown = true; }
@@ -862,13 +854,8 @@
 
         function endGame(loserId) {
             if (isGameOver) return; isGameOver = true; const winner = loserId === 'A' ? 'B' : 'A';
-            
-            // 修正點：對戰結束時立即隱藏所有解題視窗
-            playerA.isSolving = false;
-            playerA.mathUI.style.display = 'none';
-            playerB.isSolving = false;
-            playerB.mathUI.style.display = 'none';
-
+            playerA.isSolving = false; playerA.mathUI.style.display = 'none';
+            playerB.isSolving = false; playerB.mathUI.style.display = 'none';
             document.getElementById('win-msg').innerText = `🏆 恭喜 玩家 ${winner} 獲得最終勝利！ 🏆`; document.getElementById('global-over').style.display = 'flex';
             const colors = ['#ffc0cb', '#ff69b4', '#ff1493', '#fff', '#ffd700'];
             for (let i = 0; i < 100; i++) {
@@ -887,7 +874,6 @@
             document.getElementById('touch-a').style.display = 'grid'; document.getElementById('touch-b').style.display = 'grid';
             if (audioEnabled) { currentBgmIndex = 0; playNextBgm(); }
         }
-
         update(); document.getElementById('help-overlay').style.display = 'flex';
     </script>
 </body>
